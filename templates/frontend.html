@@ -1,0 +1,100 @@
+
+<html>
+<head>
+        <meta http-equiv="refresh" content="30"/>
+                
+                <script type="text/javascript">
+                window.onload = function () {
+                    var chart = new CanvasJS.Chart("chartContainer",
+                    {
+                        title:{
+                            text: "Response Codes in the last 5 Minutes"
+                        },
+                        legend: {
+                            maxWidth: 350,
+                            itemWidth: 120
+                        },
+                        data: [
+                        {
+                            type: "pie",
+                            showInLegend: true,
+                            legendText: "{indexLabel}",
+                            dataPoints: [
+                            {% for key in rawcounts %}
+                                { y: {{key[1]}}, indexLabel: "{{key[0]}}" },
+                                {% endfor %}  
+                            ]
+                        }
+                        ]
+                    });
+                    chart.render();
+                }
+  /*              
+                var data = {
+
+  labels: {{codestring}},
+  series: {{codecountstring}}
+};
+
+var options = {
+  labelInterpolationFnc: function(value) {
+    return value[0]
+  }
+};
+
+var responsiveOptions = [
+  ['screen and (min-width: 640px)', {
+    chartPadding: 30,
+    labelOffset: 100,
+    labelDirection: 'explode',
+    labelInterpolationFnc: function(value) {
+      return value;
+    }
+  }],
+  ['screen and (min-width: 1024px)', {
+    labelOffset: 80,
+    chartPadding: 20
+  }]
+];
+*/
+                </script>
+                
+                <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+                <!--
+                <script type="text/javascript" src="/static/js/lib/chartist.min.js"></script>
+                
+                        
+                        <link rel="stylesheet" href="/static/css/lib/chartist.min.css">-->
+                        <title>Polling app</title>                     
+</head>    
+<body>
+
+  
+      <h1>Last 10 Polls</h1>
+      <table><tr><TD>timestamp</TD><td>code</td></tr>
+      {% for response in responses %}
+      <tr>
+      <td>{{response.timestamp}}</td>
+      <td>{{response.code}}</td>  
+      </tr>
+      {% endfor %}
+      </table>
+      <h1>Response Codes for Last 5 Minutes</h1>
+      <table>
+        <tr><td>Code</td>
+        {% for key in rawcounts %}
+        <TD>{{key[0]}}</TD>
+        {% endfor %}
+            
+        </tr><tr><td>Count</td>
+      {% for rawcount in rawcounts %}
+      
+      <td>{{rawcount[1]}}</td>  
+        
+      {% endfor %}
+    </tr>  
+    </table>
+    <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+
+    </body>
+  </html>
